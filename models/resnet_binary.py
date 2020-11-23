@@ -499,12 +499,19 @@ class BasicBlock(nn.Module):
         inplanes = x.shape[1]
         groups = math.ceil(inplanes / max_size)
 
-        if (xn.shape[1] <= 128):
+        if (xpn.shape[1] <= 128):
             x1, x2, x3, x4, x5, x6, x7, x8, x9 = split_tensor_128(xn)
+        elif (xn.shape[1] == 256):
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92 = split_tesnsor_256(xn)
         elif (xn.shape[1] == 384):
-            x1,x2,x3,x4,x5,x6,x7,x8,x9,x12,x22,x32,x42,x52,x62,x72,x82,x92,x13,x23,x33,x43,x53,x63,x73,x83,x93 = split_tesnsor_384(xn)
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93 = split_tesnsor_384(
+                xn)
+        elif (xn.shape[1] == 512):
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93, x14, x24, x34, x44, x54, x64, x74, x84, x94 = split_tesnsor_512(
+                xn)
+
         else:
-            print(xp.shape)
+            print(xn.shape)
             print("============ILLEGAL INPUT======================")
 
 
