@@ -504,6 +504,7 @@ class BasicBlock(nn.Module):
         elif (xn.shape[1] == 384):
             x1,x2,x3,x4,x5,x6,x7,x8,x9,x12,x22,x32,x42,x52,x62,x72,x82,x92,x13,x23,x33,x43,x53,x63,x73,x83,x93 = split_tesnsor_384(xn)
         else:
+            print(xp.shape)
             print("============ILLEGAL INPUT======================")
 
 
