@@ -28,8 +28,6 @@ parser.add_argument('--results_dir', metavar='RESULTS_DIR', default='./results',
                     help='results dir')
 parser.add_argument('--save', metavar='SAVE', default='',
                     help='saved folder')
-parser.add_argument('--data', metavar='DATASET', default='imagenet',
-                    help='dataset name')
 parser.add_argument('--dataset', metavar='DATASET', default='imagenet',
                     help='dataset name or folder')
 parser.add_argument('--model', '-a', metavar='MODEL', default='alexnet',
@@ -140,9 +138,9 @@ def main():
 
     # Data loading code
     default_transform = {
-        'train': get_transform(args.data,
+        'train': get_transform(args.dataset,
                                input_size=args.input_size, augment=True),
-        'eval': get_transform(args.data,
+        'eval': get_transform(args.dataset,
                               input_size=args.input_size, augment=False)
     }
     transform = getattr(model, 'input_transform', default_transform)
@@ -155,7 +153,7 @@ def main():
     criterion.type(args.type)
     model.type(args.type)
 
-    val_data = get_dataset(args.dataset + '/val', 'val', transform['eval'])
+    val_data = get_dataset(args.dataset, 'val', transform['eval'])
     val_loader = torch.utils.data.DataLoader(
         val_data,
         batch_size=args.batch_size, shuffle=False,
@@ -166,7 +164,7 @@ def main():
         print("Evaluation Results:\tLoss "+str(round(val_loss,4))+'\tPrec@1 '+str(round(val_prec1,4))+'\tPrec@5 '+str(round(val_prec5,4)))
         return
 
-    train_data = get_dataset(args.dataset + '/train', 'train', transform['train'])
+    train_data = get_dataset(args.dataset, 'train', transform['train'])
     train_loader = torch.utils.data.DataLoader(
         train_data,
         batch_size=args.batch_size, shuffle=True,
