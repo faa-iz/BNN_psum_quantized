@@ -747,8 +747,11 @@ class ResNet_imagenet(ResNet):
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
         self.avgpool = nn.AvgPool2d(7)
-        self.fc = BinarizeLinear(512 * block.expansion, num_classes)
+        self.bn2 = nn.BatchNorm1d(512*block.expansion)
 
+
+        self.fc = BinarizeLinear(512 * block.expansion, num_classes)
+        self.bn3 = nn.BatchNorm1d(1000)
         init_model(self)
         self.regime = {
             0: {'optimizer': 'SGD', 'lr': 1e-1,
