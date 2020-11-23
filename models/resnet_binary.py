@@ -748,7 +748,7 @@ class ResNet_imagenet(ResNet):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
         self.avgpool = nn.AvgPool2d(7)
         self.bn2 = nn.BatchNorm1d(512*block.expansion)
-
+        self.tanh2 = nn.Hardtanh(inplace=True)
 
         self.fc = BinarizeLinear(512 * block.expansion, num_classes)
         self.bn3 = nn.BatchNorm1d(1000)
