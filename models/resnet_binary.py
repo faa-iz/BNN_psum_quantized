@@ -406,6 +406,7 @@ class BasicBlock(nn.Module):
             out.append(torch.clamp(self.conv82(x82),-thresh,thresh))
             out.append(torch.clamp(self.conv92(x92),-thresh,thresh))
 
+        if (xp.shape[1] > 256):
             out.append(torch.clamp(self.conv13(x13), -thresh, thresh))
             out.append(torch.clamp(self.conv23(x23), -thresh, thresh))
             out.append(torch.clamp(self.conv33(x33), -thresh, thresh))
@@ -415,6 +416,17 @@ class BasicBlock(nn.Module):
             out.append(torch.clamp(self.conv73(x73), -thresh, thresh))
             out.append(torch.clamp(self.conv83(x83), -thresh, thresh))
             out.append(torch.clamp(self.conv93(x93), -thresh, thresh))
+
+        if (xp.shape[1] > 384):
+            out.append(torch.clamp(self.conv14(x14), -thresh, thresh))
+            out.append(torch.clamp(self.conv24(x24), -thresh, thresh))
+            out.append(torch.clamp(self.conv34(x34), -thresh, thresh))
+            out.append(torch.clamp(self.conv44(x44), -thresh, thresh))
+            out.append(torch.clamp(self.conv54(x54), -thresh, thresh))
+            out.append(torch.clamp(self.conv64(x64), -thresh, thresh))
+            out.append(torch.clamp(self.conv74(x74), -thresh, thresh))
+            out.append(torch.clamp(self.conv84(x84), -thresh, thresh))
+            out.append(torch.clamp(self.conv94(x94), -thresh, thresh))
 
         '''
         if(inplanes>128):
@@ -529,7 +541,6 @@ class BasicBlock(nn.Module):
         out.append(torch.clamp(self.conv9_2(x9),-thresh,thresh))
 
         if(xn.shape[1]>128):
-
             out.append(torch.clamp(self.conv12_2(x12), -thresh, thresh))
             out.append(torch.clamp(self.conv22_2(x22), -thresh, thresh))
             out.append(torch.clamp(self.conv32_2(x32), -thresh, thresh))
@@ -540,6 +551,7 @@ class BasicBlock(nn.Module):
             out.append(torch.clamp(self.conv82_2(x82), -thresh, thresh))
             out.append(torch.clamp(self.conv92_2(x92), -thresh, thresh))
 
+        if (xn.shape[1] > 256):
             out.append(torch.clamp(self.conv13_2(x13), -thresh, thresh))
             out.append(torch.clamp(self.conv23_2(x23), -thresh, thresh))
             out.append(torch.clamp(self.conv33_2(x33), -thresh, thresh))
@@ -549,6 +561,17 @@ class BasicBlock(nn.Module):
             out.append(torch.clamp(self.conv73_2(x73), -thresh, thresh))
             out.append(torch.clamp(self.conv83_2(x83), -thresh, thresh))
             out.append(torch.clamp(self.conv93_2(x93), -thresh, thresh))
+
+        if (xn.shape[1] > 384):
+            out.append(torch.clamp(self.conv14_2(x14), -thresh, thresh))
+            out.append(torch.clamp(self.conv24_2(x24), -thresh, thresh))
+            out.append(torch.clamp(self.conv34_2(x34), -thresh, thresh))
+            out.append(torch.clamp(self.conv44_2(x44), -thresh, thresh))
+            out.append(torch.clamp(self.conv54_2(x54), -thresh, thresh))
+            out.append(torch.clamp(self.conv64_2(x64), -thresh, thresh))
+            out.append(torch.clamp(self.conv74_2(x74), -thresh, thresh))
+            out.append(torch.clamp(self.conv84_2(x84), -thresh, thresh))
+            out.append(torch.clamp(self.conv94_2(x94), -thresh, thresh))
 
         '''
         for i in range(groups):
