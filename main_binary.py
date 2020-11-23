@@ -138,9 +138,9 @@ def main():
 
     # Data loading code
     default_transform = {
-        'train': get_transform(args.dataset,
+        'train': get_transform(args.dataset + '/train',
                                input_size=args.input_size, augment=True),
-        'eval': get_transform(args.dataset,
+        'eval': get_transform(args.dataset + '/val',
                               input_size=args.input_size, augment=False)
     }
     transform = getattr(model, 'input_transform', default_transform)
@@ -153,7 +153,7 @@ def main():
     criterion.type(args.type)
     model.type(args.type)
 
-    val_data = get_dataset(args.dataset, 'val', transform['eval'])
+    val_data = get_dataset(args.dataset + '/val', 'val', transform['eval'])
     val_loader = torch.utils.data.DataLoader(
         val_data,
         batch_size=args.batch_size, shuffle=False,
@@ -164,7 +164,7 @@ def main():
         print("Evaluation Results:\tLoss "+str(round(val_loss,4))+'\tPrec@1 '+str(round(val_prec1,4))+'\tPrec@5 '+str(round(val_prec5,4)))
         return
 
-    train_data = get_dataset(args.dataset, 'train', transform['train'])
+    train_data = get_dataset(args.dataset + '/train', 'train', transform['train'])
     train_loader = torch.utils.data.DataLoader(
         train_data,
         batch_size=args.batch_size, shuffle=True,
