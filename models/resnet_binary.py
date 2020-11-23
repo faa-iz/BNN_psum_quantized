@@ -109,6 +109,28 @@ def split_tensor_128(xp):
 
     return x1,x2,x3,x4,x5,x6,x7,x8,x9
 
+def split_tesnsor_256(xp,max_size = 128):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x12 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x22 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x32 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x42 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x52 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x62 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x72 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x82 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x92 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+
+    return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92
+
 def split_tesnsor_384(xp,max_size = 128):
     x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
     x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
@@ -139,6 +161,47 @@ def split_tesnsor_384(xp,max_size = 128):
     x93 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
 
     return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93
+
+def split_tesnsor_512(xp,max_size = 128):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x12 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x22 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x32 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x42 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x52 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x62 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x72 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x82 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x92 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x13 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x23 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x33 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x43 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x53 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x63 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x73 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x83 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x93 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x14 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x24 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x34 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x44 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x54 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x64 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x74 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x84 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x94 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+
+    return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93, x14, x24, x34, x44, x54, x64, x74, x84, x94
+
 
 
 class BasicBlock(nn.Module):
@@ -189,7 +252,7 @@ class BasicBlock(nn.Module):
         self.conv8 = Binaryconv1x1(inplanes, planes, stride)
         self.conv9 = Binaryconv1x1(inplanes, planes, stride)
         #'''
-        if (input_dem>128):
+        if (input_dem > 128):     #Input channels = 256
             self.conv12 = Binaryconv1x1(inplanes, planes, stride)
             self.conv22 = Binaryconv1x1(inplanes, planes, stride)
             self.conv32 = Binaryconv1x1(inplanes, planes, stride)
@@ -200,6 +263,7 @@ class BasicBlock(nn.Module):
             self.conv82 = Binaryconv1x1(inplanes, planes, stride)
             self.conv92 = Binaryconv1x1(inplanes, planes, stride)
 
+        if (input_dem > 256):       #Input channels = 384
             self.conv13 = Binaryconv1x1(inplanes, planes, stride)
             self.conv23 = Binaryconv1x1(inplanes, planes, stride)
             self.conv33 = Binaryconv1x1(inplanes, planes, stride)
@@ -209,30 +273,18 @@ class BasicBlock(nn.Module):
             self.conv73 = Binaryconv1x1(inplanes, planes, stride)
             self.conv83 = Binaryconv1x1(inplanes, planes, stride)
             self.conv93 = Binaryconv1x1(inplanes, planes, stride)
+
+        if (input_dem > 384):       #Input channels = 512
+            self.conv14 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv24 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv34 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv44 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv54 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv64 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv74 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv84 = Binaryconv1x1(inplanes, planes, stride)
+            self.conv94 = Binaryconv1x1(inplanes, planes, stride)
         #'''
-        '''
-        for i  in range(groups):
-            if(i == (groups-1)):
-                self.conv1.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv2.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv3.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv4.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv5.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv6.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv7.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv8.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-                self.conv9.append(Binaryconv1x1(inplanes - (max_size*i), planes, stride))
-            else:
-                self.conv1.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv3.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv4.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv5.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv6.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv7.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv8.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv9.append(Binaryconv1x1(max_size, planes, stride))
-        '''
 
         ###########################################     END     ##########################################
 
@@ -268,6 +320,7 @@ class BasicBlock(nn.Module):
             self.conv82_2 = Binaryconv1x1(inplanes, planes)
             self.conv92_2 = Binaryconv1x1(inplanes, planes)
 
+        if (planes > 256):
             self.conv13_2 = Binaryconv1x1(inplanes, planes)
             self.conv23_2 = Binaryconv1x1(inplanes, planes)
             self.conv33_2 = Binaryconv1x1(inplanes, planes)
@@ -277,32 +330,19 @@ class BasicBlock(nn.Module):
             self.conv73_2 = Binaryconv1x1(inplanes, planes)
             self.conv83_2 = Binaryconv1x1(inplanes, planes)
             self.conv93_2 = Binaryconv1x1(inplanes, planes)
-        #'''
-        '''
-        for i  in range(groups):
-            if(i == (groups-1)):
-                self.conv1_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv2_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv3_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv4_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv5_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv6_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv7_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv8_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-                self.conv9_2.append(Binaryconv1x1(planes - (max_size*i), planes, stride))
-            else:
-                self.conv1_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv2_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv3_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv4_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv5_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv6_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv7_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv8_2.append(Binaryconv1x1(max_size, planes, stride))
-                self.conv9_2.append(Binaryconv1x1(max_size, planes, stride))
 
-        ###########################################     END     ##########################################
-        '''
+        if (planes > 384):
+            self.conv14_2 = Binaryconv1x1(inplanes, planes)
+            self.conv24_2 = Binaryconv1x1(inplanes, planes)
+            self.conv34_2 = Binaryconv1x1(inplanes, planes)
+            self.conv44_2 = Binaryconv1x1(inplanes, planes)
+            self.conv54_2 = Binaryconv1x1(inplanes, planes)
+            self.conv64_2 = Binaryconv1x1(inplanes, planes)
+            self.conv74_2 = Binaryconv1x1(inplanes, planes)
+            self.conv84_2 = Binaryconv1x1(inplanes, planes)
+            self.conv94_2 = Binaryconv1x1(inplanes, planes)
+        #'''
+
         self.tanh2 = nn.Hardtanh(inplace=True)
         self.bn2 = nn.BatchNorm2d(planes)
 
@@ -326,8 +366,13 @@ class BasicBlock(nn.Module):
         #splitting x
         if(xp.shape[1]<=128):
             x1,x2,x3,x4,x5,x6,x7,x8,x9 = split_tensor_128(xp)
-        elif(xp.shape[1]==384):
+        elif(xp.shape[1]==256):
+            x1,x2,x3,x4,x5,x6,x7,x8,x9,x12,x22,x32,x42,x52,x62,x72,x82,x92= split_tesnsor_256(xp)
+        elif (xp.shape[1] == 384):
             x1,x2,x3,x4,x5,x6,x7,x8,x9,x12,x22,x32,x42,x52,x62,x72,x82,x92,x13,x23,x33,x43,x53,x63,x73,x83,x93 = split_tesnsor_384(xp)
+        elif (xp.shape[1] == 512):
+            x1,x2,x3,x4,x5,x6,x7,x8,x9,x12,x22,x32,x42,x52,x62,x72,x82,x92,x13,x23,x33,x43,x53,x63,x73,x83,x93,x14,x24,x34,x44,x54,x64,x74,x84,x94 = split_tesnsor_512(xp)
+
         else:
             print("============ILLEGAL INPUT======================")
 
