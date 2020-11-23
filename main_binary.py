@@ -37,7 +37,7 @@ parser.add_argument('--model', '-a', metavar='MODEL', default='alexnet',
                     help='model architecture: ' +
                     ' | '.join(model_names) +
                     ' (default: alexnet)')
-parser.add_argument('--input_size', type=int, default=None,
+parser.add_argument('--input_size', type=int, default=224,
                     help='image input size')
 parser.add_argument('--model_config', default='',
                     help='additional architecture configuration')
