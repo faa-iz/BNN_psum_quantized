@@ -375,7 +375,7 @@ class BasicBlock(nn.Module):
 
         else:
             print("============ILLEGAL INPUT======================")\
-            print(x.shape)
+            print(xp.shape)
 
 
 
