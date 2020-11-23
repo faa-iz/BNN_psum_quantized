@@ -770,7 +770,14 @@ class ResNet_cifar10(ResNet):
 def resnet_binary(**kwargs):
     num_classes, depth, dataset = map(
         kwargs.get, ['num_classes', 'depth', 'dataset'])
-    if dataset == 'imagenet':
+
+
+    if dataset == 'cifar10':
+        num_classes = num_classes or 10
+        depth = depth or 18
+        return ResNet_cifar10(num_classes=num_classes,
+                              block=BasicBlock, depth=depth)
+    else:                                       #if dataset == 'imagenet':
         num_classes = num_classes or 1000
         depth = depth or 18
         if depth == 18:
@@ -788,9 +795,3 @@ def resnet_binary(**kwargs):
         if depth == 152:
             return ResNet_imagenet(num_classes=num_classes,
                                    block=Bottleneck, layers=[3, 8, 36, 3])
-
-    elif dataset == 'cifar10':
-        num_classes = num_classes or 10
-        depth = depth or 18
-        return ResNet_cifar10(num_classes=num_classes,
-                              block=BasicBlock, depth=depth)
