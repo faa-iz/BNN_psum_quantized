@@ -28,6 +28,8 @@ parser.add_argument('--results_dir', metavar='RESULTS_DIR', default='./results',
                     help='results dir')
 parser.add_argument('--save', metavar='SAVE', default='',
                     help='saved folder')
+parser.add_argument('--data', metavar='DATASET', default='imagenet',
+                    help='dataset name')
 parser.add_argument('--dataset', metavar='DATASET', default='imagenet',
                     help='dataset name or folder')
 parser.add_argument('--model', '-a', metavar='MODEL', default='alexnet',
@@ -97,7 +99,7 @@ def main():
     # create model
     logging.info("creating model %s", args.model)
     model = models.__dict__[args.model]
-    model_config = {'input_size': args.input_size, 'dataset': args.dataset}
+    model_config = {'input_size': args.input_size, 'dataset': args.data}
 
     if args.model_config is not '':
         model_config = dict(model_config, **literal_eval(args.model_config))
