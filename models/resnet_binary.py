@@ -751,6 +751,7 @@ class ResNet_imagenet(ResNet):
         self.tanh2 = nn.Hardtanh(inplace=True)
 
         self.fc = BinarizeLinear(512 * block.expansion, num_classes)
+        self.logsoftmax = nn.LogSoftmax()
         self.bn3 = nn.BatchNorm1d(1000)
         init_model(self)
         self.regime = {
