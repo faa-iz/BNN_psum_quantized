@@ -499,7 +499,7 @@ class BasicBlock(nn.Module):
         inplanes = x.shape[1]
         groups = math.ceil(inplanes / max_size)
 
-        if (xpn.shape[1] <= 128):
+        if (xn.shape[1] <= 128):
             x1, x2, x3, x4, x5, x6, x7, x8, x9 = split_tensor_128(xn)
         elif (xn.shape[1] == 256):
             x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92 = split_tesnsor_256(xn)
