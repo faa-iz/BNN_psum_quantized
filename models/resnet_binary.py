@@ -28,7 +28,7 @@ binarize = False
 #binarize = True
 #graph = True
 
-scale = 7.5
+scale = 1
 thresh = 8000
 
 num_bit = 1
@@ -599,9 +599,9 @@ class BasicBlock(nn.Module):
 
         #print(str(output.shape) + " ==>> " + str(residual.shape))
         output += residual
-        if self.do_bntan:
-            output = self.bn2(output)
-            output = self.tanh2(output)
+        #if self.do_bntan:
+        output = self.bn2(output)
+        output = self.tanh2(output)
 
         #print(partial_sums)
 
