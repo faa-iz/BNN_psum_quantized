@@ -573,31 +573,7 @@ class BasicBlock(nn.Module):
             out.append(torch.clamp(self.conv84_2(x84), -thresh, thresh))
             out.append(torch.clamp(self.conv94_2(x94), -thresh, thresh))
 
-        '''
-        for i in range(groups):
-            if (i == (groups - 1)):
-                out.append(self.conv1_2[i](x1.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv2_2[i](x2.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv3_2[i](x3.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv4_2[i](x4.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv5_2[i](x5.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv6_2[i](x6.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv7_2[i](x7.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv8_2[i](x8.narrow(1, (max_size * i), inplanes)))
-                out.append(self.conv9_2[i](x9.narrow(1, (max_size * i), inplanes)))
 
-            else:
-                out.append(self.conv1_2[i](x1.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv2_2[i](x2.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv3_2[i](x3.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv4_2[i](x4.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv5_2[i](x5.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv6_2[i](x6.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv7_2[i](x7.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv8_2[i](x8.narrow(1, (max_size * i), max_size)))
-                out.append(self.conv9_2[i](x9.narrow(1, (max_size * i), max_size)))
-                
-        '''
 
         output = torch.zeros(out[0].shape).cuda()
 
@@ -680,9 +656,9 @@ class Bottleneck(nn.Module):
             residual = self.downsample(x)
 
         out += residual
-        if self.do_bntan:
-            out = self.bn2(out)
-            out = self.tanh2(out)
+        #if self.do_bntan:
+        out = self.bn2(out)
+        out = self.tanh2(out)
 
         return out
 
