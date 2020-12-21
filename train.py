@@ -68,7 +68,7 @@ def main(config, nni_params={}):
     # build model architecture, then print to console
     model = import_module('model', config)(**config['model']['args'])#config.initialize('arch', module_arch)
     logger.info(model)
-    print(model)
+    #print(model)
     # get function handles of loss and metrics
     loss = getattr(module_loss, config['loss'])
     metrics = [getattr(module_metric, met) for met in config['metrics']]
