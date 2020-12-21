@@ -82,9 +82,11 @@ class BinActive(nn.Module):
         self.backward_ste = backward_ste
         self.kwargs = kwargs
 
+    @staticmethod
     def forward(self, x):
         return BinarizeFunc(self.backward_ste, **self.kwargs)(x)
 
+    @staticmethod
     def extra_repr(self):
         s = ('{backward_ste}, {}')
         t = ''
