@@ -29,6 +29,8 @@ class BinarizeFunc(torch.autograd.Function):
     '''
     Binarize the input activations and calculate the mean across channel dimension.
     '''
+
+    @staticmethod
     def __init__(self, backward_ste, **kwargs):
         self.ste = BackwardSTE.get_backward_func(backward_ste)
 
