@@ -112,7 +112,7 @@ class ResNet(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10, **kwargs):
         super(ResNet, self).__init__()
         if (not kwargs.get('full_precision', False)):
-            self.nonlin = lambda : BinActive(kwargs.get("activation", "STE"))
+            self.nonlin = lambda : BinActive.apply(kwargs.get("activation", "STE"))
         else:
             self.nonlin = nn.Hardtanh
         self.in_planes = 16
