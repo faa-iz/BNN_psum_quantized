@@ -88,7 +88,7 @@ class BinActive(nn.Module):
 
     #@staticmethod
     def forward(self, x):
-        return BinarizeFunc.apply(self.backward_ste, **self.kwargs)(x)
+        return BinarizeFunc(self.backward_ste, **self.kwargs)(x)
 
     #@staticmethod
     def extra_repr(self):
