@@ -57,7 +57,7 @@
     "trainer": {
         "module_name": "trainer_bnn",
         "type": "TrainerBNN",
-        "epochs": 100,
+        "epochs": 500,
         "save_dir": "saved/",
         "save_period": 50,
         "verbosity": 2,
