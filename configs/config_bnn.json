@@ -1,10 +1,10 @@
 {
     "name": "bnn cifar10 fp",
-    "n_gpu": 1,
+    "n_gpu": 4,
 
     "model": {
-        "module_name": "resnet_cifar_small",
-        "type": "resnet20",
+        "module_name": "alexnet_binary",
+        "type": "alexnet_binary_mod",
         "args": {
             "num_classes": 10,
             "activation": "STE", 
