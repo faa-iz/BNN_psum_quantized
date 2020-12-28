@@ -29,7 +29,7 @@
         "type": "Cifar10BigDataLoader",
         "args":{
             "data_dir": "",
-            "batch_size": 80,
+            "batch_size": 256,
             "val_batch_size": 80,
             "shuffle": true,
             "validation_split": 0.0,
