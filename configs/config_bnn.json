@@ -3,8 +3,8 @@
     "n_gpu": 4,
 
     "model": {
-        "module_name": "alexnet_binary",
-        "type": "alexnet_binary_mod",
+        "module_name": "resnet_cifar_small",
+        "type": "resnet20",
         "args": {
             "num_classes": 10,
             "activation": "STE", 
@@ -29,7 +29,7 @@
         "type": "Cifar10BigDataLoader",
         "args":{
             "data_dir": "",
-            "batch_size": 256,
+            "batch_size": 80,
             "val_batch_size": 80,
             "shuffle": true,
             "validation_split": 0.0,

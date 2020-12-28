@@ -5,6 +5,69 @@ from .binarized_modules import *
 
 __all__ = ['alexnet_binary_mod']
 
+
+class partial_conv(nn.Module):
+    expansion = 1
+
+    def __init__(self, in_planes, planes, kernel_size=11, stride=4, padding=2, full_precision=True,  **kwargs):
+        super(partial_conv, self).__init__()
+
+        if(in_planes==3):
+            conv1 = BinaryConv2d(1, int(64 * self.ratioInfl), kernel_size=11, stride=4, padding=2, full_precision=True)
+            conv2 = BinaryConv2d(1, int(64 * self.ratioInfl), kernel_size=11, stride=4, padding=2, full_precision=True)
+            conv3 = BinaryConv2d(1, int(64 * self.ratioInfl), kernel_size=11, stride=4, padding=2, full_precision=True)
+        else:
+            if(kernel_size == 5):
+                print("yet to code")
+
+                if(in_planes>128):
+                    print("yet to code")
+
+                    if (in_planes > 256):
+                        print("yet to code")
+
+
+            elif (kernel_size == 3):
+                print("yet to code")
+
+                if (in_planes > 128):
+                    print("yet to code")
+
+                    if (in_planes > 256):
+                        print("yet to code")
+
+    def forward(self, x):
+        output = []
+        if(x.shape[1]==3):    #First layer split by channel
+            x1 = x.narrow(1, 0, 1)
+            x2 = x.narrow(1, 1, 1)
+            x3 = x.narrow(1, 2, 1)
+            output.append(self.conv1(x1))
+            output.append(self.conv2(x2))
+            output.append(self.conv3(x2))
+
+        else:
+            if(self.kernel_size == 5):
+                print("yet to code")
+
+                if (self.in_planes > 128):
+                    print("yet to code")
+
+                    if (self.in_planes > 256):
+                        print("yet to code")
+            elif (self.kernel_size == 3):
+                print("yet to code")
+
+                if (self.in_planes > 128):
+                    print("yet to code")
+
+                    if (self.in_planes > 256):
+                        print("yet to code")
+
+        out = merge(output)
+
+        return out
+
 class AlexNetOWT_BN(nn.Module):
     def init_model(self):
         model = self
