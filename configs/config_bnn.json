@@ -7,7 +7,7 @@
         "type": "resnet20",
         "args": {
             "num_classes": 10,
-            "activation": "STE", 
+            "activation": "SWISH",
             "scale": false,
             "compute_scale": 1.0,
             "reg_type": "l1", 
