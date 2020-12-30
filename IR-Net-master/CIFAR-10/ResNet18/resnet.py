@@ -12,6 +12,9 @@ import torch.nn.functional as F
 from . import ir_1w1a
 
 
+__all__ = ['resnet18', 'ResNet', 'resnet20', 'resnet32', 'resnet44', 'resnet56', 'resnet110', 'resnet1202']
+
+
 class BasicBlock(nn.Module):
     expansion = 1
 
