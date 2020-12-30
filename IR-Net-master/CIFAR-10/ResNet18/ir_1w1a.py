@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from . import binaryfunction
+import binaryfunction
 import torch
 import math
 
