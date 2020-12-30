@@ -142,7 +142,7 @@ def main():
         else:
             k = torch.tensor([1]).float().cuda()
 
-        for i in range(3):
+        for i in range(2):
 
             model.module.layer1[i].conv1.k = k
             model.module.layer1[i].conv2.k = k
