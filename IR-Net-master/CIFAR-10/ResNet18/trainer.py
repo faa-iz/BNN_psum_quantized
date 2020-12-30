@@ -66,8 +66,8 @@ def main():
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
 
-    model = torch.nn.DataParallel(resnet.__dict__[args.arch]())
-    #model = resnet.__dict__[args.arch]()
+    #model = torch.nn.DataParallel(resnet.__dict__[args.arch]())
+    model = resnet.__dict__[args.arch]()
     model.cuda()
 
     # optionally resume from a checkpoint
@@ -134,8 +134,8 @@ def main():
         Kmin, Kmax = math.log(K_min) / math.log(10), math.log(K_max) / math.log(10)
         return torch.tensor([math.pow(10, Kmin + (Kmax - Kmin) / args.epochs * epoch)]).float().cuda()
 
-    print (model.module)
-    #print (model)
+    #print (model.module)
+    print (model)
 
     for epoch in range(args.start_epoch, args.epochs):
         t = Log_UP(T_min, T_max, epoch)
@@ -145,7 +145,7 @@ def main():
             k = torch.tensor([1]).float().cuda()
 
         for i in range(2):
-
+            '''
             model.module.layer1[i].conv1.k = k
             model.module.layer1[i].conv2.k = k
             model.module.layer1[i].conv1.t = t
@@ -165,7 +165,27 @@ def main():
             model.module.layer4[i].conv2.k = k
             model.module.layer4[i].conv1.t = t
             model.module.layer4[i].conv2.t = t
+            '''
 
+            model.layer1[i].conv1.k = k
+            model.layer1[i].conv2.k = k
+            model.layer1[i].conv1.t = t
+            model.layer1[i].conv2.t = t
+
+            model.layer2[i].conv1.k = k
+            model.layer2[i].conv2.k = k
+            model.layer2[i].conv1.t = t
+            model.layer2[i].conv2.t = t
+
+            model.layer3[i].conv1.k = k
+            model.layer3[i].conv2.k = k
+            model.layer3[i].conv1.t = t
+            model.layer3[i].conv2.t = t
+
+            model.layer4[i].conv1.k = k
+            model.layer4[i].conv2.k = k
+            model.layer4[i].conv1.t = t
+            model.layer4[i].conv2.t = t
 
 
         # train for one epoch
