@@ -135,6 +135,7 @@ def main():
         return torch.tensor([math.pow(10, Kmin + (Kmax - Kmin) / args.epochs * epoch)]).float().cuda()
 
     print (model.module)
+    #print (model)
 
     for epoch in range(args.start_epoch, args.epochs):
         t = Log_UP(T_min, T_max, epoch)
@@ -159,6 +160,13 @@ def main():
             model.module.layer3[i].conv2.k = k
             model.module.layer3[i].conv1.t = t
             model.module.layer3[i].conv2.t = t
+
+            model.module.layer4[i].conv1.k = k
+            model.module.layer4[i].conv2.k = k
+            model.module.layer4[i].conv1.t = t
+            model.module.layer4[i].conv2.t = t
+
+
 
         # train for one epoch
         print('current lr {:.5e}'.format(optimizer.param_groups[0]['lr']))
