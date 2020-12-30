@@ -126,4 +126,11 @@ def test():
     y = net(torch.randn(1,3,32,32))
     print(y.size())
 
+
+if __name__ == "__main__":
+    for net_name in __all__:
+        if net_name.startswith('resnet'):
+            print(net_name)
+            test(globals()[net_name]())
+            print()
 # test()
