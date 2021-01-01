@@ -3,7 +3,7 @@ import math
 import torch.utils.model_zoo as model_zoo
 import sys
 sys.path.append('./modules')
-import ir_1w1a
+import modules.ir_1w1a as ir_1w1a
 
 BN = None
 
