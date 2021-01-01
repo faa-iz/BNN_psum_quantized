@@ -101,10 +101,10 @@ def main():
             normalize,
         ]))
 
-    if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-    else:
-        train_sampler = None
+    #if args.distributed:
+    #    train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+    #else:
+    train_sampler = None
 
     train_loader = torch.utils.data.DataLoader(
         train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
