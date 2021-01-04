@@ -117,7 +117,7 @@ def main():
                                 momentum=args.momentum,
                                 weight_decay=args.weight_decay)
 
-    #lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, args.epochs, eta_min = 0, last_epoch=-1)
+    lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, args.epochs, eta_min = 0, last_epoch=-1)
     if args.arch in ['resnet1202', 'resnet110']:
         # for resnet1202 original paper uses lr=0.01 for first 400 minibatches for warm-up
         # then switch back. In this implementation it will correspond for first epoch.
@@ -138,7 +138,7 @@ def main():
     print (model)
 
     for epoch in range(args.start_epoch, args.epochs):
-        adjust_learning_rate(optimizer, epoch, args)
+        #adjust_learning_rate(optimizer, epoch, args)
         t = Log_UP(T_min, T_max, epoch)
         if (t < 1):
             k = 1 / t
@@ -192,7 +192,7 @@ def main():
         # train for one epoch
         print('current lr {:.5e}'.format(optimizer.param_groups[0]['lr']))
         train(train_loader, model, criterion, optimizer, epoch)
-        #lr_scheduler.step()
+        lr_scheduler.step()
 
         # evaluate on validation set
         prec1 = validate(val_loader, model, criterion)
