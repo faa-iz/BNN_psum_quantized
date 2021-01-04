@@ -127,7 +127,8 @@ def main():
         Kmin, Kmax = math.log(K_min) / math.log(10), math.log(K_max) / math.log(10)
         return torch.tensor([math.pow(10, Kmin + (Kmax - Kmin) / args.epochs * epoch)]).float().cuda()
 
-    print (model.module)
+    #print (model.module)
+    print (model)
 
     for epoch in range(args.start_epoch, args.epochs):
     
