@@ -138,7 +138,9 @@ def main():
         else:
             k = torch.tensor([1]).float().cuda()
         model.conv0.k = k
-        model.conv1.k = k
+
+
+        model.selfconv1.k = k
         model.conv2.k = k
         model.conv3.k = k
         model.conv4.k = k
@@ -149,7 +151,10 @@ def main():
         model.conv2.t = t
         model.conv3.t = t
         model.conv4.t = t
+
         model.conv5.t = t
+
+
         '''
         model.module.conv0.k = k
         model.module.conv1.k = k
@@ -183,6 +188,7 @@ def main():
                 'state_dict': model.state_dict(),
                 'best_prec1': best_prec1,
             }, is_best, filename=os.path.join(args.save_dir, 'checkpoint.th'))
+        print('BEST ACC: ' + str(best_prec1) + '%')
 
     save_checkpoint({
         'state_dict': model.state_dict(),
