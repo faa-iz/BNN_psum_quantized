@@ -1,4 +1,4 @@
-'''VGG for CIFAR10. FC layers are removed.
+ '''VGG for CIFAR10. FC layers are removed.
 (c) YANG, Wei
 '''
 import torch.nn as nn

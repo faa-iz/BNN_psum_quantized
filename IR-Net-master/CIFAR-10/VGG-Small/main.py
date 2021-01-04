@@ -69,6 +69,7 @@ def main():
         os.makedirs(args.save_dir)
 
     model = torch.nn.DataParallel(vgg.__dict__[args.arch]())
+    model = vgg.__dict__[args.arch]()
     model.cuda()
 
     # optionally resume from a checkpoint
@@ -135,6 +136,19 @@ def main():
             k = 1 / t
         else:
             k = torch.tensor([1]).float().cuda()
+        model.conv0.k = k
+        model.conv1.k = k
+        model.conv2.k = k
+        model.conv3.k = k
+        model.conv4.k = k
+        model.conv5.k = k
+        model.conv0.t = t
+        model.conv1.t = t
+        model.conv2.t = t
+        model.conv3.t = t
+        model.conv4.t = t
+        model.conv5.t = t
+        '''
         model.module.conv0.k = k
         model.module.conv1.k = k
         model.module.conv2.k = k
@@ -147,6 +161,7 @@ def main():
         model.module.conv3.t = t
         model.module.conv4.t = t
         model.module.conv5.t = t
+        '''
 
         # train for one epoch
         print('current lr {:.5e}'.format(optimizer.param_groups[0]['lr']))
