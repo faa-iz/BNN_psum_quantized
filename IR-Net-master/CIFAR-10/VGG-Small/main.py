@@ -140,7 +140,7 @@ def main():
         model.conv0.k = k
 
 
-        model.selfconv1.k = k
+        model.conv1.k = k
         model.conv2.k = k
         model.conv3.k = k
         model.conv4.k = k
