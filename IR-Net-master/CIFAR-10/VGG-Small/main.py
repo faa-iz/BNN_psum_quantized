@@ -182,12 +182,12 @@ def main():
         is_best = prec1 > best_prec1
         best_prec1 = max(prec1, best_prec1)
 
-        if epoch > 0 and epoch % args.save_every == 0:
+        if epoch > 0 and epoch % 1 == 0:
             save_checkpoint({
                 'epoch': epoch + 1,
                 'state_dict': model.state_dict(),
                 'best_prec1': best_prec1,
-            }, is_best, filename=os.path.join(args.save_dir, 'checkpoint.th'))
+            }, is_best, filename=os.path.join(args.save_dir, 'checkpoint.pth.tar'))
         print('BEST ACC: ' + str(best_prec1) + '%')
 
     save_checkpoint({
@@ -303,8 +303,10 @@ def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     """
     Save the training model
     """
-    # torch.save(state, filename)
-    pass
+    if is_best:
+        torch.save(state, os.path.join(args.save_dir, 'best.pth.tar'))
+    torch.save(state, filename)
+
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
