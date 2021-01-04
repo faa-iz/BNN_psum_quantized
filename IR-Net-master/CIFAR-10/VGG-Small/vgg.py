@@ -2,6 +2,7 @@
 VGG for CIFAR10. FC layers are removed.
 (c) YANG, Wei
 '''
+import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 import math
@@ -20,6 +21,259 @@ model_urls = {
     'vgg16': 'https://download.pytorch.org/models/vgg16-397923af.pth',
     'vgg19': 'https://download.pytorch.org/models/vgg19-dcbb9e9d.pth',
 }
+
+
+quantize = False
+binarize = False
+
+
+
+
+
+def split_tensor_128(xp):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2)
+
+    return x1,x2,x3,x4,x5,x6,x7,x8,x9
+
+def split_tensor_256(xp,max_size = 128):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x12 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x22 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x32 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x42 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x52 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x62 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x72 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x82 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x92 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+
+
+    return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92
+
+def split_tensor_384(xp,max_size = 128):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x12 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x22 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x32 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x42 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x52 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x62 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x72 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x82 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x92 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x13 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x23 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x33 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x43 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x53 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x63 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x73 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x83 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x93 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+
+    return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93
+
+
+def split_tensor_512(xp,max_size = 128):
+    x1 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x2 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x3 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,0,max_size)
+    x4 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x5 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x6 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,0,max_size)
+    x7 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x8 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x9 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,0,max_size)
+    x12 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x22 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x32 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x42 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x52 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x62 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x72 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x82 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x92 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size,max_size)
+    x13 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x23 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x33 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x43 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x53 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x63 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x73 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x83 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x93 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1,max_size*2,max_size)
+    x14 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x24 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x34 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 0, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x44 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x54 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x64 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 1, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x74 = xp.narrow(2, 0, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x84 = xp.narrow(2, 1, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+    x94 = xp.narrow(2, 2, xp.shape[2] - 2).narrow(3, 2, xp.shape[3] - 2).narrow(1, max_size * 3, max_size)
+
+    return x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93, x14, x24, x34, x44, x54, x64, x74, x84, x94
+
+
+
+class split_conv():
+    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True):
+        super(split_conv(), self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias)
+
+        self.padding1 = nn.ZeroPad2d(1)
+
+        self.conv1= ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv4 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv5 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv6 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv7 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv8 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv9 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+
+        if(in_channels>128):
+            self.conv1_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv2_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv3_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv4_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv5_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv6_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv7_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv8_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+            self.conv9_1 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+
+            if (in_channels>256):
+                self.conv1_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv2_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv3_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv4_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv5_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv6_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv7_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv8_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                self.conv9_2 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+
+                if(in_channels>384):
+                    self.conv1_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv2_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv3_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv4_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv5_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv6_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv7_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv8_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+                    self.conv9_3 = ir_1w1a.IRConv2d(128, out_channels, kernel_size=1, padding=0, bias=False)
+
+
+
+
+    def forward(self, input):
+
+        out = []
+        input = self.padding1(input)
+
+        if(self.in_channels == 128):
+            x1,x2,x3,x4,x5,x6,x7,x8,x9 = split_tensor_128(input)
+        elif (self.in_channels == 256):
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92 = split_tensor_256(input)
+        elif (self.in_channels == 384):
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93 = split_tensor_384(input)
+        elif (self.in_channels == 512):
+            x1, x2, x3, x4, x5, x6, x7, x8, x9, x12, x22, x32, x42, x52, x62, x72, x82, x92, x13, x23, x33, x43, x53, x63, x73, x83, x93, x14, x24, x34, x44, x54, x64, x74, x84, x94 = split_tensor_512(input)
+
+        out.append(self.conv1)
+        out.append(self.conv2)
+        out.append(self.conv3)
+        out.append(self.conv4)
+        out.append(self.conv5)
+        out.append(self.conv6)
+        out.append(self.conv7)
+        out.append(self.conv8)
+        out.append(self.conv9)
+
+        if(self.in_channels>128):
+            out.append(self.conv1_1)
+            out.append(self.conv2_1)
+            out.append(self.conv3_1)
+            out.append(self.conv4_1)
+            out.append(self.conv5_1)
+            out.append(self.conv6_1)
+            out.append(self.conv7_1)
+            out.append(self.conv8_1)
+            out.append(self.conv9_1)
+
+            if (self.in_channels > 256):
+                out.append(self.conv1_2)
+                out.append(self.conv2_2)
+                out.append(self.conv3_2)
+                out.append(self.conv4_2)
+                out.append(self.conv5_2)
+                out.append(self.conv6_2)
+                out.append(self.conv7_2)
+                out.append(self.conv8_2)
+                out.append(self.conv9_2)
+
+                if (self.in_channels > 384):
+                    out.append(self.conv1_3)
+                    out.append(self.conv2_3)
+                    out.append(self.conv3_3)
+                    out.append(self.conv4_3)
+                    out.append(self.conv5_3)
+                    out.append(self.conv6_3)
+                    out.append(self.conv7_3)
+                    out.append(self.conv8_3)
+                    out.append(self.conv9_3)
+
+                    if (self.in_channels > 512):
+                        out.append(self.conv1_4)
+                        out.append(self.conv2_4)
+                        out.append(self.conv3_4)
+                        out.append(self.conv4_4)
+                        out.append(self.conv5_4)
+                        out.append(self.conv6_4)
+                        out.append(self.conv7_4)
+                        out.append(self.conv8_4)
+                        out.append(self.conv9_4)
+
+        output = torch.zeros(out[0].shape).cuda()
+        for out_tensor in out:
+            # out_tensor = self.bn2(out_tensor,groups=groups)
+            # out_tensor = self.tanh2(out_tensor)
+            #if quantize:
+                #out_tensor = custom_quantize(out_tensor, num_bit)
+            #elif binarize:
+                #out_tensor = scale * Binarize(out_tensor)
+
+            output = output + out_tensor
+
+
+        return output
+
 
 
 class VGG(nn.Module):
@@ -156,19 +410,35 @@ class VGG_SMALL_1W1A(nn.Module):
         super(VGG_SMALL_1W1A, self).__init__()
         self.conv0 = nn.Conv2d(3, 128, kernel_size=3, padding=1, bias=False)
         self.bn0 = nn.BatchNorm2d(128)
-        self.conv1 = ir_1w1a.IRConv2d(128, 128, kernel_size=3, padding=1, bias=False)
+
+        #self.conv1 = ir_1w1a.IRConv2d(128, 128, kernel_size=3, padding=1, bias=False)
+        self.conv1 = split_conv(128, 128, kernel_size=3, padding=1, bias=False)
+
         self.pooling = nn.MaxPool2d(kernel_size=2, stride=2)
         self.bn1 = nn.BatchNorm2d(128)
         # self.nonlinear = nn.ReLU(inplace=True)
         self.nonlinear = nn.Hardtanh(inplace=True)
-        self.conv2 = ir_1w1a.IRConv2d(128, 256, kernel_size=3, padding=1, bias=False)
+
+        #self.conv2 = ir_1w1a.IRConv2d(128, 256, kernel_size=3, padding=1, bias=False)
+        self.conv2 = split_conv(128, 256, kernel_size=3, padding=1, bias=False)
+
         self.bn2 = nn.BatchNorm2d(256)
+
         self.conv3 = ir_1w1a.IRConv2d(256, 256, kernel_size=3, padding=1, bias=False)
+        self.conv3 = split_conv(256, 256, kernel_size=3, padding=1, bias=False)
+
         self.bn3 = nn.BatchNorm2d(256)
-        self.conv4 = ir_1w1a.IRConv2d(256, 512, kernel_size=3, padding=1, bias=False)
+
+        #self.conv4 = ir_1w1a.IRConv2d(256, 512, kernel_size=3, padding=1, bias=False)
+        self.conv4 = split_conv(256, 512, kernel_size=3, padding=1, bias=False)
+
         self.bn4 = nn.BatchNorm2d(512)
-        self.conv5 = ir_1w1a.IRConv2d(512, 512, kernel_size=3, padding=1, bias=False)
+
+        #self.conv5 = ir_1w1a.IRConv2d(512, 512, kernel_size=3, padding=1, bias=False)
+        self.conv5 = split_conv(512, 512, kernel_size=3, padding=1, bias=False)
+
         self.bn5 = nn.BatchNorm2d(512)
+
         self.fc = nn.Linear(512*4*4, num_classes)
         self._initialize_weights()
 
