@@ -138,16 +138,12 @@ def main():
         else:
             k = torch.tensor([1]).float().cuda()
 
-        #set_k(model)
+        set_k(model,k)
+        set_t(model,t)
 
 
-        model.conv0.t = t
-        model.conv1.t = t
-        model.conv2.t = t
-        model.conv3.t = t
-        model.conv4.t = t
 
-        model.conv5.t = t
+
 
 
         '''
