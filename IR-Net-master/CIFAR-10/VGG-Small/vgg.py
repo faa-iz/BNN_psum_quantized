@@ -415,7 +415,7 @@ class VGG_SMALL_1W1A(nn.Module):
 
         self.bn2 = nn.BatchNorm2d(256)
 
-        self.conv3 = ir_1w1a.IRConv2d(256, 256, kernel_size=3, padding=1, bias=False)
+        #self.conv3 = ir_1w1a.IRConv2d(256, 256, kernel_size=3, padding=1, bias=False)
         self.conv3 = split_conv(256, 256, kernel_size=3, padding=1, bias=False)
 
         self.bn3 = nn.BatchNorm2d(256)

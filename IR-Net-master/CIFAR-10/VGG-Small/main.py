@@ -137,14 +137,9 @@ def main():
             k = 1 / t
         else:
             k = torch.tensor([1]).float().cuda()
-        model.conv0.k = k
 
+        #set_k(model)
 
-        model.conv1.k = k
-        model.conv2.k = k
-        model.conv3.k = k
-        model.conv4.k = k
-        model.conv5.k = k
 
         model.conv0.t = t
         model.conv1.t = t
@@ -340,6 +335,202 @@ def accuracy(output, target, topk=(1,)):
         correct_k = correct[:k].view(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
+
+def set_k(model,k):
+    model.conv0.k = k
+
+    model.conv1.conv1.k = k
+    model.conv1.conv2.k = k
+    model.conv1.conv3.k = k
+    model.conv1.conv4.k = k
+    model.conv1.conv5.k = k
+    model.conv1.conv6.k = k
+    model.conv1.conv7.k = k
+    model.conv1.conv8.k = k
+    model.conv1.conv9.k = k
+
+    model.conv2.conv1.k = k
+    model.conv2.conv2.k = k
+    model.conv2.conv3.k = k
+    model.conv2.conv4.k = k
+    model.conv2.conv5.k = k
+    model.conv2.conv6.k = k
+    model.conv2.conv7.k = k
+    model.conv2.conv8.k = k
+    model.conv2.conv9.k = k
+
+    model.conv3.conv1.k = k
+    model.conv3.conv2.k = k
+    model.conv3.conv3.k = k
+    model.conv3.conv4.k = k
+    model.conv3.conv5.k = k
+    model.conv3.conv6.k = k
+    model.conv3.conv7.k = k
+    model.conv3.conv8.k = k
+    model.conv3.conv9.k = k
+    model.conv3.conv1_1.k = k
+    model.conv3.conv2_1.k = k
+    model.conv3.conv3_1.k = k
+    model.conv3.conv4_1.k = k
+    model.conv3.conv5_1.k = k
+    model.conv3.conv6_1.k = k
+    model.conv3.conv7_1.k = k
+    model.conv3.conv8_1.k = k
+    model.conv3.conv9_1.k = k
+
+    model.conv4.conv1.k = k
+    model.conv4.conv2.k = k
+    model.conv4.conv3.k = k
+    model.conv4.conv4.k = k
+    model.conv4.conv5.k = k
+    model.conv4.conv6.k = k
+    model.conv4.conv7.k = k
+    model.conv4.conv8.k = k
+    model.conv4.conv9.k = k
+    model.conv4.conv1_1.k = k
+    model.conv4.conv2_1.k = k
+    model.conv4.conv3_1.k = k
+    model.conv4.conv4_1.k = k
+    model.conv4.conv5_1.k = k
+    model.conv4.conv6_1.k = k
+    model.conv4.conv7_1.k = k
+    model.conv4.conv8_1.k = k
+    model.conv4.conv9_1.k = k
+
+    model.conv5.conv1.k = k
+    model.conv5.conv2.k = k
+    model.conv5.conv3.k = k
+    model.conv5.conv4.k = k
+    model.conv5.conv5.k = k
+    model.conv5.conv6.k = k
+    model.conv5.conv7.k = k
+    model.conv5.conv8.k = k
+    model.conv5.conv9.k = k
+    model.conv5.conv1_1.k = k
+    model.conv5.conv2_1.k = k
+    model.conv5.conv3_1.k = k
+    model.conv5.conv4_1.k = k
+    model.conv5.conv5_1.k = k
+    model.conv5.conv6_1.k = k
+    model.conv5.conv7_1.k = k
+    model.conv5.conv8_1.k = k
+    model.conv5.conv9_1.k = k
+    model.conv5.conv1_2.k = k
+    model.conv5.conv2_2.k = k
+    model.conv5.conv3_2.k = k
+    model.conv5.conv4_2.k = k
+    model.conv5.conv5_2.k = k
+    model.conv5.conv6_2.k = k
+    model.conv5.conv7_2.k = k
+    model.conv5.conv8_2.k = k
+    model.conv5.conv9_2.k = k
+    model.conv5.conv1_3.k = k
+    model.conv5.conv2_3.k = k
+    model.conv5.conv3_3.k = k
+    model.conv5.conv4_3.k = k
+    model.conv5.conv5_3.k = k
+    model.conv5.conv6_3.k = k
+    model.conv5.conv7_3.k = k
+    model.conv5.conv8_3.k = k
+    model.conv5.conv9_3.k = k
+
+def set_t(model,k):
+    model.conv0.t = k
+
+    model.conv1.conv1.t = k
+    model.conv1.conv2.t = k
+    model.conv1.conv3.t = k
+    model.conv1.conv4.t = k
+    model.conv1.conv5.t = k
+    model.conv1.conv6.t = k
+    model.conv1.conv7.t = k
+    model.conv1.conv8.t = k
+    model.conv1.conv9.t = k
+
+    model.conv2.conv1.t = k
+    model.conv2.conv2.t = k
+    model.conv2.conv3.t = k
+    model.conv2.conv4.t = k
+    model.conv2.conv5.t = k
+    model.conv2.conv6.t = k
+    model.conv2.conv7.t = k
+    model.conv2.conv8.t = k
+    model.conv2.conv9.t = k
+
+    model.conv3.conv1.t = k
+    model.conv3.conv2.t = k
+    model.conv3.conv3.t = k
+    model.conv3.conv4.t = k
+    model.conv3.conv5.t = k
+    model.conv3.conv6.t = k
+    model.conv3.conv7.t = k
+    model.conv3.conv8.t = k
+    model.conv3.conv9.t = k
+    model.conv3.conv1_1.t = k
+    model.conv3.conv2_1.t = k
+    model.conv3.conv3_1.t = k
+    model.conv3.conv4_1.t = k
+    model.conv3.conv5_1.t = k
+    model.conv3.conv6_1.t = k
+    model.conv3.conv7_1.t = k
+    model.conv3.conv8_1.t = k
+    model.conv3.conv9_1.t = k
+
+    model.conv4.conv1.t = k
+    model.conv4.conv2.t = k
+    model.conv4.conv3.t = k
+    model.conv4.conv4.t = k
+    model.conv4.conv5.t = k
+    model.conv4.conv6.t = k
+    model.conv4.conv7.t = k
+    model.conv4.conv8.t = k
+    model.conv4.conv9.t = k
+    model.conv4.conv1_1.t = k
+    model.conv4.conv2_1.t = k
+    model.conv4.conv3_1.t = k
+    model.conv4.conv4_1.t = k
+    model.conv4.conv5_1.t = k
+    model.conv4.conv6_1.t = k
+    model.conv4.conv7_1.t = k
+    model.conv4.conv8_1.t = k
+    model.conv4.conv9_1.t = k
+
+    model.conv5.conv1.t = k
+    model.conv5.conv2.t = k
+    model.conv5.conv3.t = k
+    model.conv5.conv4.t = k
+    model.conv5.conv5.t = k
+    model.conv5.conv6.t = k
+    model.conv5.conv7.t = k
+    model.conv5.conv8.t = k
+    model.conv5.conv9.t = k
+    model.conv5.conv1_1.t = k
+    model.conv5.conv2_1.t = k
+    model.conv5.conv3_1.t = k
+    model.conv5.conv4_1.t = k
+    model.conv5.conv5_1.t = k
+    model.conv5.conv6_1.t = k
+    model.conv5.conv7_1.t = k
+    model.conv5.conv8_1.t = k
+    model.conv5.conv9_1.t = k
+    model.conv5.conv1_2.t = k
+    model.conv5.conv2_2.t = k
+    model.conv5.conv3_2.t = k
+    model.conv5.conv4_2.t = k
+    model.conv5.conv5_2.t = k
+    model.conv5.conv6_2.t = k
+    model.conv5.conv7_2.t = k
+    model.conv5.conv8_2.t = k
+    model.conv5.conv9_2.t = k
+    model.conv5.conv1_3.t = k
+    model.conv5.conv2_3.t = k
+    model.conv5.conv3_3.t = k
+    model.conv5.conv4_3.t = k
+    model.conv5.conv5_3.t = k
+    model.conv5.conv6_3.t = k
+    model.conv5.conv7_3.t = k
+    model.conv5.conv8_3.t = k
+    model.conv5.conv9_3.t = k
 
 
 if __name__ == '__main__':
