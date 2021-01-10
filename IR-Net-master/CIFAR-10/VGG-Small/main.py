@@ -139,7 +139,7 @@ def main():
             k = torch.tensor([1]).float().cuda()
 
         set_k(model,k)
-        set_t(model,t)rm
+        set_t(model,t)
 
 
         '''
