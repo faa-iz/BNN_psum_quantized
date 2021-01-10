@@ -78,12 +78,15 @@ class PACT_Quant(Function):
         return value_q
 
     @staticmethod
-    def backward(self, grad_output):
+    def backward(self, grad_output):        self.save_for_backward(value, step_size)
+
         value, alpha = self.saved_tensors
 
         middle = (value >= alpha).float()
 
         return grad_output, (grad_output * middle).sum().unsqueeze(dim=0), None
+
+
 
 class LSQ(Function):
     @staticmethod
@@ -226,7 +229,7 @@ class BinarizeConv2d(_Conv2dQ):
                 self.init_state.fill_(1)
 
             out = PACT_Quant.apply(out, self.alpha, self.nbits)
-            #out = quantizeLSQ(out, self.step_size, self.nbits)
+            out = quantizeLSQ(out, self.alpha, self.nbits)
 
         return out
 

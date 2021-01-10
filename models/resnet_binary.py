@@ -3,20 +3,25 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import math
 import numpy as np
-from .binarized_modules import  BinarizeLinear,BinarizeConv2d,custom_quantize, Binarize
+from .binarized_modules import  BinarizeLinear,BinarizeConv2d,custom_quantize, Binarize, PACT_Quant
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 __all__ = ['resnet_binary']
 
-quantize = True
+quantize = False
 graph = False
 binarize = False
+PACT = False
 
 #global partial_sums
 
 #partial_sums = []
 ##################################  PARTIAL SUMS PARAMETERS CONTROL #################################
+quantize = True
+#graph = True
+#binarize = True
+#PACT = True
 
 scale = 1
 thresh = 8000
@@ -35,7 +40,7 @@ file = str(num_bit) + '_bit.png'
 def Binaryconv1x1(in_planes, out_planes, stride=1):
     "3x3 convolution with padding"
     return BinarizeConv2d(in_planes, out_planes, kernel_size=1, stride=stride,
-                     padding=0, bias=False, nbits=num_bit, quantize=quantize)
+                     padding=0, bias=False, nbits=6, quantize=quantize)
 
 def conv3x3(in_planes, out_planes, stride=1):
     "3x3 convolution with padding"
@@ -463,8 +468,10 @@ class BasicBlock(nn.Module):
         output = torch.zeros(out[0].shape).cuda()
         i = 0
         for out_tensor in out:
+            if(PACT):
+                out_tensor = PACT_Q(out_tensor)
             if binarize and not quantize:
-                out_tensor = torch.clamp(out_tensor, -thresh, thresh)
+                #out_tensor = torch.clamp(out_tensor, -thresh, thresh)
                 out_tensor = scale * Binarize(out_tensor)
 
             output = output + out_tensor
