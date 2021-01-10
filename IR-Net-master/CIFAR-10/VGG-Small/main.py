@@ -134,16 +134,12 @@ def main():
     
         t = Log_UP(T_min, T_max, epoch)
         if (t < 1):
-            k = 1 / t
+            k = 1
         else:
             k = torch.tensor([1]).float().cuda()
 
         set_k(model,k)
-        set_t(model,t)
-
-
-
-
+        set_t(model,t)rm
 
 
         '''
