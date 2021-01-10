@@ -78,7 +78,8 @@ class PACT_Quant(Function):
         return value_q
 
     @staticmethod
-    def backward(self, grad_output):        self.save_for_backward(value, step_size)
+    def backward(self, grad_output):
+        self.save_for_backward(value, step_size)
 
         value, alpha = self.saved_tensors
 
