@@ -79,8 +79,6 @@ class PACT_Quant(Function):
 
     @staticmethod
     def backward(self, grad_output):
-        self.save_for_backward(value, step_size)
-
         value, alpha = self.saved_tensors
 
         middle = (value >= alpha).float()
