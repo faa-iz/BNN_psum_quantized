@@ -468,9 +468,10 @@ class BasicBlock(nn.Module):
         output = torch.zeros(out[0].shape).cuda()
         i = 0
         for out_tensor in out:
-            if(PACT):
-                out_tensor = PACT_Q(out_tensor)
-            if binarize and not quantize:
+            out_tensor = torch.clamp(out_tensor,-thresh, thresh)
+            #if(PACT):
+            #    out_tensor = PACT_Q(out_tensor)
+            if binarize:
                 #out_tensor = torch.clamp(out_tensor, -thresh, thresh)
                 out_tensor = scale * Binarize(out_tensor)
 
@@ -567,8 +568,8 @@ class BasicBlock(nn.Module):
         output = torch.zeros(out[0].shape).cuda()
 
         for out_tensor in out:
-            if binarize and not quantize:
-                out_tensor = tensor.clamp(out_tensor, -thresh, thresh)
+            out_tensor = torch.clamp(out_tensor, -thresh, thresh)
+            if binarize:
                 out_tensor = scale * Binarize(out_tensor)
 
             output = output + out_tensor
