@@ -73,7 +73,7 @@ class PACT_Quant(Function):
     def forward(self, value, alpha, nbits):
         self.save_for_backward(value, alpha)
 
-        value.clamp_(0, float(alpha))
+        value.clamp_(-float(alpha), float(alpha))
         value_q = (value * (2**nbits - 1)/alpha).round() * alpha/(2**nbits - 1)
         return value_q
 
