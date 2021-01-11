@@ -229,7 +229,7 @@ class BinarizeConv2d(_Conv2dQ):
                 self.init_state.fill_(1)
 
             #out = PACT_Quant.apply(out, self.alpha, self.nbits)
-            out = PACT_Quant.apply(out, self.alpha, 8)
+            #out = PACT_Quant.apply(out, self.alpha, 8)
             #out = quantizeLSQ(out, self.alpha, self.nbits)
 
         return out

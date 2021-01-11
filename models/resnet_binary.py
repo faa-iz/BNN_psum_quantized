@@ -24,7 +24,7 @@ quantize = True
 #PACT = True
 
 scale = 1
-thresh = 8000
+thresh = 8
 
 num_bit = 1
 
