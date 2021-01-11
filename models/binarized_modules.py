@@ -227,7 +227,8 @@ class BinarizeConv2d(_Conv2dQ):
                 self.alpha.data.copy_(torch.ones(1)*32)
                 self.init_state.fill_(1)
 
-            out = PACT_Quant.apply(out, self.alpha, self.nbits)
+            #out = PACT_Quant.apply(out, self.alpha, self.nbits)
+            out = PACT_Quant.apply(out, self.alpha, 8)
             #out = quantizeLSQ(out, self.alpha, self.nbits)
 
         return out
