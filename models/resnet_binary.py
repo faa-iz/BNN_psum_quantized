@@ -20,7 +20,7 @@ PACT = False
 ##################################  PARTIAL SUMS PARAMETERS CONTROL #################################
 quantize = True
 #graph = True
-#binarize = True
+binarize = True
 #PACT = True
 
 scale = 1
