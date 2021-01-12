@@ -473,7 +473,7 @@ class BasicBlock(nn.Module):
             #    out_tensor = PACT_Q(out_tensor)
             if binarize:
                 #out_tensor = torch.clamp(out_tensor, -thresh, thresh)
-                out_tensor = scale * Binarize(out_tensor)
+                out_tensor = scale * Binarize(out_tensor, quant_mode='nd')
 
             output = output + out_tensor
 
@@ -570,7 +570,7 @@ class BasicBlock(nn.Module):
         for out_tensor in out:
             out_tensor = torch.clamp(out_tensor, -thresh, thresh)
             if binarize:
-                out_tensor = scale * Binarize(out_tensor)
+                out_tensor = scale * Binarize(out_tensor,quant_mode='nd')
 
             output = output + out_tensor
 
