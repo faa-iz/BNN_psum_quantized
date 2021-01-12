@@ -23,7 +23,7 @@ quantize = True
 binarize = True
 #PACT = True
 
-scale = 1
+scale = 8
 thresh = 8
 
 num_bit = 1
