@@ -19,7 +19,88 @@ def Binarize(tensor,quant_mode='det'):
     else:
         return tensor.add_(1).div_(2).add_(torch.rand(tensor.size()).add(-0.5)).clamp_(0,1).round().mul_(2).add_(-1)
 
+class PACT_Quant(Function):
+    @staticmethod
+    def forward(self, value, alpha, nbits):
+        self.save_for_backward(value, alpha)
 
+        value.clamp_(-float(alpha), float(alpha))
+        value_q = (value * (2**nbits - 1)/alpha).round() * alpha/(2**nbits - 1)
+        value_q = alpha*Binarize(value_q,quant_mode='schot')
+        return value_q
+
+    @staticmethod
+    def backward(self, grad_output):
+        value, alpha = self.saved_tensors
+
+        middle = (value >= alpha).float()
+
+        return grad_output, (grad_output * middle).sum().unsqueeze(dim=0), None
+
+
+
+class LSQ(Function):
+    @staticmethod
+    def forward(self, value, step_size, nbits):
+        self.save_for_backward(value, step_size)
+        self.other = nbits
+
+        #set levels
+        Qn = -2**(nbits-1)
+        Qp = 2**(nbits-1) - 1
+
+        v_bar = (value/step_size).round().clamp(Qn, Qp)
+        v_hat = v_bar*step_size
+        return v_hat
+
+    @staticmethod
+    def backward(self, grad_output):
+        value, step_size = self.saved_tensors
+        nbits = self.other
+
+        #set levels
+        Qn = -2**(nbits-1)
+        Qp = 2**(nbits-1) - 1
+        grad_scale = 1.0 / math.sqrt(value.numel() * Qp)
+
+        lower = (value/step_size <= Qn).float()
+        higher = (value/step_size >= Qp).float()
+        middle = (1.0 - higher - lower)
+
+        grad_step_size = lower*Qn + higher*Qp + middle*(-value/step_size + (value/step_size).round())
+
+        return grad_output*middle, (grad_output*grad_step_size*grad_scale).sum().unsqueeze(dim=0), None
+
+def grad_scale(x, scale):
+    yOut = x
+    yGrad = x*scale
+    y = yOut.detach() - yGrad.detach() + yGrad
+    return y
+
+def round_pass(x):
+    yOut = x.round()
+    yGrad = x
+    y = yOut.detach() - yGrad.detach() + yGrad
+    return y
+
+def quantizeLSQ(v, s, p):
+    #set levels
+    Qn = -2**(p-1)
+    Qp = 2**(p-1) - 1
+    if p==1 or p==-1: #-1 is ternary
+        Qn = -1
+        Qp = 1
+        gradScaleFactor = 1.0 / math.sqrt(v.numel())
+    else:
+        gradScaleFactor = 1.0 / math.sqrt(v.numel() * Qp)
+
+    #quantize
+    s = grad_scale(s, gradScaleFactor)
+    vbar=round_pass((v/s).clamp(Qn, Qp))
+    if p==1:
+        vbar = Binarize(vbar)
+    vhat = vbar*s
+    return vhat
 
 
 class HingeLoss(nn.Module):
@@ -128,6 +209,15 @@ class BinarizeConv2d(nn.Conv2d):
         if not self.bias is None:
             self.bias.org=self.bias.data.clone()
             out += self.bias.view(1, -1, 1, 1).expand_as(out)
+
+        if self.init_state == 0:
+            self.alpha.data.copy_(torch.ones(1) * 32)
+            self.init_state.fill_(1)
+
+        if self.init_state == 0:
+            self.beta.data.copy_(torch.ones(1) * 32)
+            self.init_state.fill_(1)
+
 
         return out
 
