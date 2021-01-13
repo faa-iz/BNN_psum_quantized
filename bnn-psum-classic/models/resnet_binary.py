@@ -441,10 +441,11 @@ class BasicBlock(nn.Module):
         i = 0
         for out_tensor in out:
             #out_tensor = self.bn1(out_tensor,groups=groups)
-            out_tensor = self.tanh1(out_tensor)
+
             if quantize:
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
+                out_tensor = self.tanh1(out_tensor)
                 out_tensor = scale * Binarize(out_tensor)
 
 
@@ -558,10 +559,11 @@ class BasicBlock(nn.Module):
 
         for out_tensor in out:
             #out_tensor = self.bn2(out_tensor,groups=groups)
-            out_tensor = self.tanh2(out_tensor)
+
             if quantize:
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
+                out_tensor = self.tanh2(out_tensor)
                 out_tensor = scale * Binarize(out_tensor)
 
             output = output + out_tensor
@@ -580,9 +582,9 @@ class BasicBlock(nn.Module):
 
         #print(str(output.shape) + " ==>> " + str(residual.shape))
         output += residual
-        if self.do_bntan:
-           output = self.bn2(output)
-           output = self.tanh2(output)
+        #if self.do_bntan:
+        output = self.bn2(output)
+        output = self.tanh2(output)
 
         #print(partial_sums)
 
