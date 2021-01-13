@@ -4,7 +4,7 @@ import torch.nn as nn
 import math
 from torch.autograd import Variable
 from torch.autograd import Function
-
+from torch.nn.parameter import Parameter
 
 import numpy as np
 
@@ -194,6 +194,12 @@ class BinarizeConv2d(nn.Conv2d):
 
     def __init__(self, *kargs, **kwargs):
         super(BinarizeConv2d, self).__init__(*kargs, **kwargs)
+        self.nbits = 8
+        self.alpha = Parameter(torch.zeros(1))
+        self.beta = Parameter(torch.zeros(1))
+
+        # buffer is not updated for optim.step
+        self.register_buffer('init_state', torch.zeros(1))
 
 
     def forward(self, input):
