@@ -2,7 +2,7 @@ import os
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
-_DATASETS_MAIN_PATH = '/home/azatkariuly/data/'
+_DATASETS_MAIN_PATH = '/home/faaiz/data/'
 #_DATASETS_MAIN_PATH = '/home/Datasets'
 
 _dataset_path = {
