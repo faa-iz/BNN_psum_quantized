@@ -213,6 +213,7 @@ def main():
         results.add(epoch=epoch + 1, train_loss=train_loss, val_loss=val_loss,
                     train_error1=100 - train_prec1, val_error1=100 - val_prec1,
                     train_error5=100 - train_prec5, val_error5=100 - val_prec5)
+        print("BEST PREC:"+ str(best_prec1))
         #results.plot(x='epoch', y=['train_loss', 'val_loss'],
         #             title='Loss', ylabel='loss')
         #results.plot(x='epoch', y=['train_error1', 'val_error1'],
