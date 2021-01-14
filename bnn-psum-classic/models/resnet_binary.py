@@ -29,8 +29,8 @@ binarize = False
 #graph = True
 
 
-scale = 8
-thresh = 80000
+scale = 7.55
+thresh = 8
 
 num_bit = 1
 
