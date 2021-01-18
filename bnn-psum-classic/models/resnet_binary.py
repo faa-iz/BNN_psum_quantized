@@ -30,7 +30,7 @@ binarize = False
 
 
 scale = 7.46
-thresh = 8
+thresh = 800000
 
 num_bit = 1
 
