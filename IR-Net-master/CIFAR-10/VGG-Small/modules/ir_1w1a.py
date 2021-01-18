@@ -7,10 +7,10 @@ import math
 
 class IRConv2d(nn.Conv2d):
 
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True):
+    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True,**kwargs):
         super(IRConv2d, self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias)
-        self.k = torch.tensor([10]).float().cuda()
-        self.t = torch.tensor([0.1]).float().cuda()
+        self.k = kwargs['k']
+        self.t = kwargs['t']
 
     def forward(self, input):
         w = self.weight
