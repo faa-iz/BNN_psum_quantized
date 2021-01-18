@@ -149,6 +149,7 @@ def main():
         model.module.conv3.k = k
         model.module.conv4.k = k
         model.module.conv5.k = k
+
         model.module.conv0.t = t
         model.module.conv1.t = t
         model.module.conv2.t = t
