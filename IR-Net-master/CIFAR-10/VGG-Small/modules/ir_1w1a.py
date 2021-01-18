@@ -7,12 +7,11 @@ import math
 
 class IRConv2d(nn.Conv2d):
 
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True,**kwargs):
+    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True):
         super(IRConv2d, self).__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias)
-        self.k = kwargs['k']
-        self.t = kwargs['t']
 
-    def forward(self, input):
+
+    def forward(self, input, k, t):
         w = self.weight
         a = input
         bw = w - w.view(w.size(0), -1).mean(-1).view(w.size(0), 1, 1, 1)
