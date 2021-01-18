@@ -26,7 +26,7 @@ class PACT_Quant(Function):
 
         value.clamp_(-float(alpha), float(alpha))
         value_q = (value * (2**nbits - 1)/alpha).round() * alpha/(2**nbits - 1)
-        value_q = alpha*Binarize(value_q,quant_mode='schot')
+        value_q = alpha*Binarize(value_q)
         return value_q
 
     @staticmethod
@@ -223,6 +223,8 @@ class BinarizeConv2d(nn.Conv2d):
         if self.init_state == 0:
             self.beta.data.copy_(torch.ones(1) * 32)
             self.init_state.fill_(1)
+
+        out = PACT_Quant.apply(out, self.alpha, 1)
 
 
         return out
