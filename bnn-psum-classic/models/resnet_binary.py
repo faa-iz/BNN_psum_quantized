@@ -25,7 +25,7 @@ binarize = False
 ##################################  PARTIAL SUMS PARAMETERS CONTROL #################################
 
 #quantize = True
-#binarize = True
+binarize = True
 #graph = True
 
 
