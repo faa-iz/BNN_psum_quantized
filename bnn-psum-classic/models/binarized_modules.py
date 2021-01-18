@@ -224,7 +224,7 @@ class BinarizeConv2d(nn.Conv2d):
             self.beta.data.copy_(torch.ones(1) * 32)
             self.init_state.fill_(1)
 
-        #out = PACT_Quant.apply(out, self.alpha, 1)
+        out = PACT_Quant.apply(out, self.alpha, 1)
 
 
         return out
