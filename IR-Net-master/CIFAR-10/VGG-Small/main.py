@@ -138,11 +138,11 @@ def main():
         else:
             k = torch.tensor([1]).float().cuda()
 
-        set_k(model,k)
-        set_t(model,t)
+        #set_k(model,k)
+        #set_t(model,t)
 
 
-        '''
+
         model.module.conv0.k = k
         model.module.conv1.k = k
         model.module.conv2.k = k
@@ -155,7 +155,7 @@ def main():
         model.module.conv3.t = t
         model.module.conv4.t = t
         model.module.conv5.t = t
-        '''
+
 
         # train for one epoch
         print('current lr {:.5e}'.format(optimizer.param_groups[0]['lr']))
