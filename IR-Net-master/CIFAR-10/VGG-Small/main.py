@@ -134,7 +134,7 @@ def main():
     
         t = Log_UP(T_min, T_max, epoch)
         if (t < 1):
-            k = 1
+            k = 1/t
         else:
             k = torch.tensor([1]).float().cuda()
 
@@ -148,7 +148,7 @@ def main():
         model.conv2.k = k
         model.conv3.k = k
         model.conv4.k = k
-        model.conv5.k = k
+        model.  conv5.k = k
 
         model.conv0.t = t
         model.conv1.t = t
