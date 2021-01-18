@@ -26,7 +26,7 @@ class PACT_Quant(Function):
 
         value.clamp_(-float(alpha), float(alpha))
         value_q = (value * (2**nbits - 1)/alpha).round() * alpha/(2**nbits - 1)
-        #value_q = alpha*Binarize(value_q)
+        value_q = alpha*Binarize(value_q)
         return value_q
 
     @staticmethod
