@@ -445,7 +445,7 @@ class BasicBlock(nn.Module):
             if quantize:
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
-                out_tensor = self.tanh1(out_tensor)
+                #out_tensor = self.tanh1(out_tensor)
                 out_tensor = scale * Binarize(out_tensor,'aa')
 
 
@@ -563,7 +563,7 @@ class BasicBlock(nn.Module):
             if quantize:
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
-                out_tensor = self.tanh2(out_tensor)
+                #out_tensor = self.tanh2(out_tensor)
                 out_tensor = scale * Binarize(out_tensor,'aa')
 
             output = output + out_tensor
