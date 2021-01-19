@@ -29,7 +29,7 @@ binarize = True
 #graph = True
 
 
-scale = 8
+scale = 7
 thresh = 8
 
 num_bit = 1
