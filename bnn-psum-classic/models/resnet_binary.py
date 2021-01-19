@@ -25,11 +25,11 @@ binarize = False
 ##################################  PARTIAL SUMS PARAMETERS CONTROL #################################
 
 #quantize = True
-#binarize = True
+binarize = True
 #graph = True
 
 
-scale = 7.46
+scale = 8
 thresh = 800000
 
 num_bit = 1
