@@ -29,7 +29,7 @@ binarize = True
 #graph = True
 
 
-scale = 7.14
+#scale = 7.14
 thresh = 8
 
 num_bit = 1
@@ -446,6 +446,7 @@ class BasicBlock(nn.Module):
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
                 out_tensor = self.tanh1(out_tensor)
+                scale = out_tensor.abs().mean()
                 out_tensor = scale * Binarize(out_tensor)
 
 
@@ -564,6 +565,7 @@ class BasicBlock(nn.Module):
                 out_tensor = custom_quantize(out_tensor, num_bit)
             elif binarize:
                 out_tensor = self.tanh2(out_tensor)
+                scale = out_tensor.abs().mean()
                 out_tensor = scale * Binarize(out_tensor)
 
             output = output + out_tensor
