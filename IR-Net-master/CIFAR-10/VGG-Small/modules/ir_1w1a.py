@@ -12,6 +12,8 @@ class IRConv2d(nn.Conv2d):
 
 
     def forward(self, input, k, t):
+        print("K: "+str(k))
+        print("T" +str(t))
         w = self.weight
         a = input
         bw = w - w.view(w.size(0), -1).mean(-1).view(w.size(0), 1, 1, 1)
